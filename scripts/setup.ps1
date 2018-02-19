@@ -29,13 +29,19 @@ else {
 
 # Setting execution policy for future script runs
 Write-Host "`nSetting MachineLevel Execution Policy to Bypass" -ForegroundColor Yellow
-Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
+if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole(`
+[Security.Principal.WindowsBuiltInRole] "Administrator")){
+    Set-ExecutionPolicy Bypass -Scope LocalMachine -Force
+} else {
+    Write-Host "Missing Admin privileges to setup execution policy" -ForegroundColor Red
+}
 
 # Installing ProcDump
 Write-Host "`nInstalling ProcDump ..."
 $procdump_url = "https://download.sysinternals.com/files/Procdump.zip"
 $procdump_path = "$ScriptDir\..\lib\procdump\"
 $procdump_zip = $procdump_path + "procdump.zip"
+Remove-Item -Path $procdump_path -Force -Recurse | Out-Null
 New-Item -ItemType Directory -Force -Path $procdump_path | Out-Null
 Start-BitsTransfer -Source $procdump_url -Destination $procdump_zip
 Expand-Archive -Force -LiteralPath $procdump_zip -DestinationPath $procdump_path
@@ -47,6 +53,7 @@ Write-Host "`nInstalling AutoHotkey ..."
 $ahk_url = "https://autohotkey.com/download/1.1/AutoHotkey_1.1.28.00.zip"
 $ahk_path = "$ScriptDir\..\lib\autohotkey\"
 $ahk_zip = $procdump_path + "ahk.zip"
+Remove-Item -Path $ahk_path -Force -Recurse | Out-Null
 New-Item -ItemType Directory -Force -Path $ahk_path | Out-Null
 Start-BitsTransfer -Source $ahk_url -Destination $ahk_zip
 Expand-Archive -Force -LiteralPath $ahk_zip -DestinationPath $ahk_path
