@@ -7,6 +7,8 @@ Function Find-Clan {
     
     begin {
         . "$PSScriptRoot\using.ps1"
+        $encoding = [Text.Encoding]::ASCII
+        $regex = New-Object Regex("Warlord")
     }
 
     process {
@@ -15,18 +17,42 @@ Function Find-Clan {
         if (-not (Test-Path $DumpFilePath)) {
             throw [System.IO.FileNotFoundException] "$DumpFilePath not found."
         }
-
+        
         [int] $chunkSize = 500000   # Corresponds to the max match size
         [long] $currentSearchIndex = 0
         [byte[]] $buffer = New-Object byte[] $($chunkSize*2)
 
-        [string] $searchBlock
+        [string] $searchBlock = ""
+        
+        $matchDictionnary = New-Object 'System.Collections.Generic.Dictionary[[long],[string]]'
+        
+        Using-Object ($reader = New-Object System.IO.FileStream($DumpFilePath, 'Open', 'Read')) {
 
-        $MatchDictionnary = New-Object 'System.Collections.Generic.Dictionary[[long],[string]]'
+            while ($reader.Position -lt $reader.Length)
+            {
+                # Read new chunk
+                $reader.Read($buffer, $chunkSize, $chunkSize) | Out-Null
 
-        Using-Object ($reader = New-Object System.IO.FileStream($DumpFilePath, 'System.IO.FileMode.Open', 'System.IO.FileAccess.Read'))
-        {
-            Write-Host $reader.Length
+                # Convert byte array to String
+                $searchBlock = $encoding.GetString($buffer, 0, $buffer.Length)
+
+                # Search for pattern
+                [Text.RegularExpressions.Match] $result = $regex.Match($searchBlock)
+
+                while ($result.Success)
+                {
+                    $matchDictionnary[$currentSearchIndex + $result.Index] = $result.Value
+
+                    $result = $result.NextMatch()
+                }
+
+                # Shift Buffer
+                [Array]::Copy($buffer, $chunkSize, $buffer, 0, $chunkSize)
+                $currentSearchIndex += $chunkSize
+            }
+
+            Write-Host "Found items"
+            Write-Host $matchDictionnary.Count
         }
     }
 }

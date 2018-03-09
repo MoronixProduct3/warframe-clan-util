@@ -1,3 +1,9 @@
+# Mimics the functionality of the using keyword in C#
+# Example use:
+# Using-Object ($reader = New-Object System.IO.FileStream($DumpFilePath, 'Open', 'Read')) {
+#     Write-Host $reader.Length
+# }
+
 function Using-Object
 {
     [CmdletBinding()]
