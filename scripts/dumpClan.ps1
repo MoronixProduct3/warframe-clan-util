@@ -43,12 +43,30 @@ Write-Host "[OK] Waited $WaitTimeMs ms" -ForegroundColor Green
 
 # Dumping process memory
 Write-Host "`nReading process memory ..."
-$DumpPath = "$PSScriptRoot\..\dumps\clanDump"
+$DumpPath = "$PSScriptRoot\..\dumps\clanDump.dmp"
 & "$PSScriptRoot\..\lib\procdump\procdump64.exe" -o -ma $WarframeProcess.Id $DumpPath
+if($LASTEXITCODE -eq 1) {
+    Write-Host "[OK] Successfully created dump: $DumpPath" -ForegroundColor Green
+} else {
+    Write-Host "[ERROR] Failed to dump process memory"
+    exit
+}
+
+# Minimize warframe client
+$ErrorAHK = & "$PSScriptRoot\..\lib\autohotkey\AutoHotkeyU64.exe" "$PSScriptRoot\..\ahk_scripts\minimiseWindow.ahk" | more
+if ($ErrorAHK) {
+    Write-Host "`n[WARNING] Trouble minimizing the Warframe client"
+    # Write-Host $ErrorAHK -ForegroundColor Red
+    # exit
+} else {
+    # Write-Host "[OK] Minimized client" -ForegroundColor Green
+}
 
 # Analysing memory dump
 Write-Host "`nInspecting memory dump ..."
-
+. "$PSScriptRoot\..\psFunctions\grepClan.ps1"   # Include file seach function
+$clanStructures = Find-Clan $DumpPath
+Write-Host "Found $($clanStructures.Count) clan structures"
 
 # Extracting Clan Data
 Write-Host "`nExtracting Clan Data ..."
