@@ -11,6 +11,7 @@ if ([System.IntPtr]::Size -eq 8){
     Write-Host "`nRunning on 64 bit [OK]" -ForegroundColor Green
 } else {
     Write-Host "`nError this software is intended for 64 bit only" -ForegroundColor Red
+    Read-Host -Prompt "Press Enter to exit"
     exit
 }
 
@@ -20,7 +21,7 @@ if ($PSVersionTable.PSVersion.Major -lt 5) {
     Write-Host "Instaler can be found here:"
     Write-Host "https://docs.microsoft.com/en-us/powershell/wmf/5.1/install-configure"
     Write-Host "Restart the setup process once this is complete`n"
-    
+    Read-Host -Prompt "Press Enter to exit"
     exit
 }
 else {
@@ -41,8 +42,8 @@ Write-Host "`nInstalling ProcDump ..."
 $procdump_url = "https://download.sysinternals.com/files/Procdump.zip"
 $procdump_path = "$ScriptDir\..\lib\procdump\"
 $procdump_zip = $procdump_path + "procdump.zip"
-Remove-Item -Path $procdump_path -Force -Recurse | Out-Null
-New-Item -ItemType Directory -Force -Path $procdump_path | Out-Null
+Remove-Item -Path $procdump_path -Force -Recurse -erroraction 'silentlycontinue'
+New-Item -ItemType Directory -Force -Path $procdump_path -erroraction 'silentlycontinue'
 Start-BitsTransfer -Source $procdump_url -Destination $procdump_zip
 Expand-Archive -Force -LiteralPath $procdump_zip -DestinationPath $procdump_path
 Remove-Item -Path $procdump_zip
@@ -52,9 +53,9 @@ Write-Host "[DONE]" -ForegroundColor Green
 Write-Host "`nInstalling AutoHotkey ..."
 $ahk_url = "https://autohotkey.com/download/1.1/AutoHotkey_1.1.28.00.zip"
 $ahk_path = "$ScriptDir\..\lib\autohotkey\"
-$ahk_zip = $procdump_path + "ahk.zip"
-Remove-Item -Path $ahk_path -Force -Recurse | Out-Null
-New-Item -ItemType Directory -Force -Path $ahk_path | Out-Null
+$ahk_zip = $ahk_path + "ahk.zip"
+Remove-Item -Path $ahk_path -Force -Recurse -erroraction 'silentlycontinue'
+New-Item -ItemType Directory -Force -Path $ahk_path -erroraction 'silentlycontinue'
 Start-BitsTransfer -Source $ahk_url -Destination $ahk_zip
 Expand-Archive -Force -LiteralPath $ahk_zip -DestinationPath $ahk_path
 Remove-Item -Path $ahk_zip

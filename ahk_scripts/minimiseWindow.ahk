@@ -15,6 +15,7 @@ Loop, 3 {
     Sleep, 300
     Send, {Escape}
 }
+Sleep, 300
 
 ; Unsetting WARFRAME as active focus
 WinMinimize, WARFRAME
