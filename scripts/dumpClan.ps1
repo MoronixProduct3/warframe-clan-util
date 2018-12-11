@@ -114,7 +114,6 @@ Do
     . "$PSScriptRoot\..\psFunctions\grepClan.ps1"   # Include file seach function
     $clanStructures = Find-Clan $dumpFile
     Write-Host "Found $($clanStructures.Count) clan structures"
-    
 } While ($clanStructures.Count -lt 1) 
 If ($clanStructures.Count -gt 1) {
     Write-Host "[WARNING] More than one clan structure was found." -ForegroundColor Yellow
@@ -129,7 +128,7 @@ If(!(test-path $outputPath)) { New-Item -ItemType Directory -Force -Path $output
 $currentOutputPath = "$outputPath\$(Get-Date -f dd-MM-yyyy_HH_mm_ss)"
 $outputFile = "$currentOutputPath\clanDump.json"
 New-Item -ItemType Directory -Force -Path $currentOutputPath
-$outputJson = "{clans:["
+$outputJson = "{""clans"":["
 Foreach ($clan in $clanStructures.Values)
 {
     $outputJson += "{$($clan)},"

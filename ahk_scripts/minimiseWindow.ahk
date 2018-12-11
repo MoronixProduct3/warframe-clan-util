@@ -5,8 +5,8 @@
 ; This script minizes the warframe window
 
 ; Check if the client is running
-If  !WinExist("WARFRAME"){
-    FileAppend, [ERROR] Could not find WARFRAME window, *
+If  !WinExist("Warframe"){
+    FileAppend, [ERROR] Could not find Warframe window, *
     Exit, -1
 }
 
@@ -18,4 +18,4 @@ Loop, 3 {
 Sleep, 300
 
 ; Unsetting WARFRAME as active focus
-WinMinimize, WARFRAME
+WinMinimize, Warframe

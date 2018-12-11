@@ -8,7 +8,7 @@ Function Find-Clan {
     begin {
         . "$PSScriptRoot\using.ps1"
         $encoding = [Text.Encoding]::ASCII
-        $regex = New-Object Regex('(?:"_id":{"\$oid":"\w{24}"},)?"Name":"[\w-_. ]{1,24}","Creator":(?:true|false),"Members":\[(?:{(?:(?:"_id":{"\$oid":"\w{24}"}|"DisplayName":"[\w-_. ]{1,24}"|"LastLogin":{"\$date":{"\$numberLong":"\d{13}"}}|"Rank":\d{1,2}|"Status":\d+|"Joined":{"\$date":{"\$numberLong":"\d{13}"}}|"ActiveAvatarImageType":"(?:\/\w+)+"|"PlayerLevel":\d{1,2}),?){7,8}},?){1,1000}],?(?:(?:"Ranks":\[(?:{"Name":"[/\w-_. ]+","Permissions":\d+},?)+]|"Tier":\d+|"XP":\d+|"XpCacheExpiryDate":{"\$date":{"\$numberLong":"\d{13}"}}|"IsContributor":(?:true|false)|"NumContributors":\d+),?)*')
+        $regex = New-Object Regex('(?:"_id":{"\$oid":"\w{24}"},)?"Name":"[\w-_. ]{1,24}","Members":\[(?:{(?:(?:"_id":{"\$oid":"\w{24}"}|"DisplayName":"[\w-_. ]{1,24}"|"LastLogin":{"\$date":{"\$numberLong":"\d{13}"}}|"Rank":\d{1,2}|"Status":\d+|"Joined":{"\$date":{"\$numberLong":"\d{13}"}}|"ActiveAvatarImageType":"(?:\/\w+)+"|"PlayerLevel":\d{1,2}),?){6,8}},?){1,1000}],?(?:(?:"Ranks":\[(?:{"Name":"[/\w-_. ]+","Permissions":\d+},?)+]|"Tier":\d+|"XP":\d+|"XpCacheExpiryDate":{"\$date":{"\$numberLong":"\d{13}"}}|"IsContributor":(?:true|false)|"NumContributors":\d+),?)*')
     }
 
     process {
