@@ -1,6 +1,12 @@
 # Warframe clan util
 A simple tool help you extract useful information about your clan.
 
+## Disclaimer
+This project is not affiliated with Digital Extremes Ltd.
+Warframe is a registered trademark of Digital Extremes Ltd.
+
+This software breaches the Warframe [terms of use](https://www.warframe.com/terms).
+
 ## Data
 This tool can help you obtain data such as:
 - Clan ID (this field is not always accessible)
